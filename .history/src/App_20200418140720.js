@@ -1,4 +1,4 @@
-import React, { useState, useEffect }from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import firebase from './firebase.js'
@@ -6,7 +6,6 @@ import firebase from './firebase.js'
 const App = () => {
   const [data, setData] = useState({});
   const products = Object.values(data);
-
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await fetch('./data/products.json');
