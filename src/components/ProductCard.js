@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState, useEffect} from 'react';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -7,91 +8,71 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Drawer from "@material-ui/core/Drawer";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ShoppingCart from "./ShoppingCart"
 
-const drawerWidth = 400;
 
 const useStyles = makeStyles(theme => ({
-    root: {
-      maxWidth: 300,
-      height: 600,
-    },
-    media: {
-      height: 400,
-    },
-    title: {
-        height: 10,
-        marginBottom: 20,
-        textAlign: "center",
-    },
-    description: {
-        height: 30,
-        textAlign: "center",
-    },
-    price: {
-        height: 20,
-        textAlign: "center",
-    },
-    button: {
-        background: '#2F4F4F',
-        color: 'white'
-    },
-    title: {
-      flexGrow: 1
-    },
-    hide: {
-      display: "none"
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0
-    },
-    drawerPaper: {
-      width: drawerWidth
-    },
-    drawerHeader: {
-      display: "flex",
-      alignItems: "center",
-      padding: theme.spacing(0, 1),
-      // necessary for content to be below app bar
-      ...theme.mixins.toolbar,
-      justifyContent: "flex-start"
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      }),
-      marginRight: -drawerWidth
-    },
-    contentShift: {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen
-      }),
-      marginRight: 0
-    }
-  }));
+  root: {
+    maxWidth: 300,
+    height: 600,
+  },
+  media: {
+    height: 400,
+  },
+  title: {
+      height: 10,
+      marginBottom: 20,
+      textAlign: "center",
+  },
+  description: {
+      height: 30,
+      textAlign: "center",
+  },
+  price: {
+      height: 20,
+      textAlign: "center",
+  },
+  button: {
+      background: '#2F4F4F',
+      color: 'white'
+  },
+  title: {
+    flexGrow: 1
+  }
+}));
 
-const ProductCard = ({product}) => {
+const ProductCard = ({product, ShoppingcardList, setShoppingcardList}) => {
     const [spacing, setSpacing] = React.useState(2);
     const classes = useStyles();
     const theme = useTheme();
 
-    const [open, setOpen] = React.useState(false);
-    const handleDrawerOpen = () => {
-      setOpen(true);
+    const [size, setSize] = useState('')
+
+    const handleShoppingCart = (x, title, price, sku) => {
+      setSize(x);
+      var tempCart = ShoppingcardList.slice(0);
+      console.log(ShoppingcardList.map(item => item.size));
+
+
+      let carditem = {
+        size: '',
+        price: '',
+        title: '',
+        quantity: '',
+        sku: ''
+      };
+      carditem.size = x;
+      carditem.price = price;
+      carditem.title = title;
+      carditem.quantity = 1;
+      carditem.sku = sku;
+      tempCart.push(carditem);
+
+      setShoppingcardList(tempCart);
     };
 
-    const handleDrawerClose = () => {
-      setOpen(false);
-    };
+    
+  
   
     return (
 
@@ -120,42 +101,20 @@ const ProductCard = ({product}) => {
 
       <div>
         <CardActions>
-              <Button className={classes.button} onClick={handleDrawerOpen} >
+              <Button className={classes.button} onClick={() => handleShoppingCart('S', product.title, product.price, product.sku)} >
                 S
               </Button>
-              <Button className={classes.button} onClick={handleDrawerOpen}>
+              <Button className={classes.button} onClick={() => handleShoppingCart('M', product.title, product.price, product.sku)}>
                 M
               </Button>
-              <Button className={classes.button} onClick={handleDrawerOpen}>
+              <Button className={classes.button} onClick={() => handleShoppingCart('L', product.title, product.price, product.sku)}>
                 L
               </Button>
-              <Button className={classes.button} onClick={handleDrawerOpen}>
+              <Button className={classes.button} onClick={() => handleShoppingCart('XL', product.title, product.price, product.sku)}>
                 XL
               </Button>
 
           </CardActions>
-
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="right"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            <Typography variant="h6" noWrap className={classes.title}>
-              Cart
-            </Typography>
-          </IconButton>
-        </div>
-        <Divider />
-        <p> s</p>
-        
-      </Drawer>
       </div>
       
     </Card>

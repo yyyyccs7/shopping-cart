@@ -15,6 +15,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import clsx from 'clsx';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import ShoppingCart from "./components/ShoppingCart"
+import Container from '@material-ui/core/Container';
 
 
 const App = () => {
@@ -23,6 +25,7 @@ const App = () => {
   const [data, setData] = useState({});
   const products = Object.values(data);
   const productid = Object.keys(data);
+  const[ShoppingcardList, setShoppingcardList] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -119,6 +122,7 @@ const App = () => {
       >
         <div className={classes.drawerHeader} />
         
+        
       </main>
       <Drawer
         className={classes.drawer}
@@ -137,13 +141,15 @@ const App = () => {
             </Typography>
           </IconButton>
         </div>
+        
         <Divider />
+        <ShoppingCart ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList}/>
         
       </Drawer>
+
     </div>
 
-
-        <ProductList products={products}/>
+        <ProductList products={products} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList} />
 
         
       </React.Fragment>
