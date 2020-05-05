@@ -5,6 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,11 +20,58 @@ const useStyles = makeStyles((theme) => ({
     content: {
       flex: '1 0 auto',
     },
+    icon: {
+      width: 50,
+    },
+    delete: {
+      marginLeft: 200,
+    }
   }));
 
 const ShoppingCart = ({ShoppingcardList, setShoppingcardList}) => {
     const classes = useStyles();
     const theme = useTheme();
+
+    const handleAddItem = (size, title) => {
+      var tempCart = ShoppingcardList.slice(0);
+      let i;
+      for(i = 0; i < tempCart.length; i++){
+        if(size === tempCart[i].size && title === tempCart[i].title){
+          tempCart[i].quantity += 1;
+          break;
+        }
+      }
+      setShoppingcardList(tempCart);
+    }
+
+    const handleRemoveItem = (size, title) => {
+      var tempCart = ShoppingcardList.slice(0);
+      let i;
+      for(i = 0; i < tempCart.length; i++){
+        if(size === tempCart[i].size && title === tempCart[i].title){
+          if(tempCart[i].quantity == 1){
+            return;
+          }
+          tempCart[i].quantity -= 1;
+          break;
+        }
+      }
+      setShoppingcardList(tempCart);
+    }
+
+    const handleDeleteItem = (size, title) => {
+      var tempCart = ShoppingcardList.slice(0);
+      let i;
+      for(i = 0; i < tempCart.length; i++){
+        if(size === tempCart[i].size && title === tempCart[i].title){
+          tempCart.splice(i, 1);
+          setShoppingcardList(tempCart);
+          break;
+          
+        }
+      }
+      
+    }
 
     return(
         <React.Fragment>
@@ -35,11 +85,15 @@ const ShoppingCart = ({ShoppingcardList, setShoppingcardList}) => {
                 <Typography variant="subtitle1" color="textSecondary">
                     {"$" + item.price}
                 </Typography>
-                <Typography variant="subtitle1" color="textSecondary">
+                <p variant="subtitle1" color="textSecondary">
+                  <RemoveCircleIcon className={classes.icon} onClick = { () => handleRemoveItem(item.size, item.title)}/>
                     {item.quantity}
-                </Typography>
+                  <AddCircleIcon className={classes.icon} onClick = { () => handleAddItem(item.size, item.title)}/>
+
+                  <DeleteForeverIcon className={classes.delete} onClick = { () => handleDeleteItem(item.size, item.title)}/>
+                </p>
                 <Typography variant="subtitle1" color="textSecondary">
-                    {item.size}
+                   {item.size}
                 </Typography>
                 
                 </CardContent>

@@ -51,8 +51,6 @@ const ProductCard = ({product, ShoppingcardList, setShoppingcardList}) => {
     const handleShoppingCart = (x, title, price, sku) => {
       setSize(x);
       var tempCart = ShoppingcardList.slice(0);
-      console.log(ShoppingcardList.map(item => item.size));
-
 
       let carditem = {
         size: '',
@@ -61,18 +59,29 @@ const ProductCard = ({product, ShoppingcardList, setShoppingcardList}) => {
         quantity: '',
         sku: ''
       };
-      carditem.size = x;
-      carditem.price = price;
-      carditem.title = title;
-      carditem.quantity = 1;
-      carditem.sku = sku;
-      tempCart.push(carditem);
 
+      //handle duplicate
+      let i;
+      for(i = 0; i < tempCart.length; i++){
+        if(x === tempCart[i].size && title === tempCart[i].title){
+          tempCart[i].quantity += 1;
+          break;
+        }
+      }
+
+      if(i === tempCart.length){
+        carditem.size = x;
+        carditem.price = price;
+        carditem.title = title;
+        carditem.quantity = 1;
+        carditem.sku = sku;
+        tempCart.push(carditem);
+      }
+      
       setShoppingcardList(tempCart);
     };
 
     
-  
   
     return (
 

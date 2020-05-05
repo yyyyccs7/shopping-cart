@@ -17,6 +17,7 @@ import clsx from 'clsx';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ShoppingCart from "./components/ShoppingCart"
 import Container from '@material-ui/core/Container';
+import { BottomNavigation } from '@material-ui/core';
 
 
 const App = () => {
@@ -90,6 +91,11 @@ const App = () => {
     setOpen(false);
   };
 
+  let totalprice = 0;
+  ShoppingcardList.map(each => {
+    totalprice = totalprice + each.price*each.quantity
+  })
+
   return (
     <React.Fragment>
          <div className={classes.root}>
@@ -143,7 +149,10 @@ const App = () => {
         </div>
         
         <Divider />
+       
+        
         <ShoppingCart ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList}/>
+        <p className={classes.price}> The total price is: {totalprice}</p>
         
       </Drawer>
 
