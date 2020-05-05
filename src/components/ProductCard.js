@@ -41,12 +41,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductCard = ({product, ShoppingcardList, setShoppingcardList}) => {
+const ProductCard = ({product, remain, ShoppingcardList, setShoppingcardList}) => {
     const [spacing, setSpacing] = React.useState(2);
     const classes = useStyles();
     const theme = useTheme();
 
     const [size, setSize] = useState('')
+
 
     const handleShoppingCart = (x, title, price, sku) => {
       setSize(x);
@@ -58,30 +59,38 @@ const ProductCard = ({product, ShoppingcardList, setShoppingcardList}) => {
         title: '',
         quantity: '',
         sku: ''
-      };
+      }
 
       //handle duplicate
       let i;
-      for(i = 0; i < tempCart.length; i++){
-        if(x === tempCart[i].size && title === tempCart[i].title){
-          tempCart[i].quantity += 1;
-          break;
-        }
-      }
+       for(i = 0; i < tempCart.length; i++){
+         if(x === tempCart[i].size && title === tempCart[i].title){
+           if(remain[sku][x] <= 0){
+             alert("out of stock");
+             break;
+           }
+           tempCart[i].quantity += 1;
+           remain[sku][x] -= 1;
+           break;
+         }
+       }
 
-      if(i === tempCart.length){
-        carditem.size = x;
-        carditem.price = price;
-        carditem.title = title;
-        carditem.quantity = 1;
-        carditem.sku = sku;
-        tempCart.push(carditem);
-      }
-      
+        if(i === tempCart.length){
+          if(remain[sku][x] <= 0){
+            alert("out of stock");
+          }
+          else{
+            carditem.size = x;
+            carditem.price = price;
+            carditem.title = title;
+            carditem.quantity = 1;
+            carditem.sku = sku;
+            remain[sku][x] -= 1;
+            tempCart.push(carditem);
+          } 
+       }
       setShoppingcardList(tempCart);
     };
-
-    
   
     return (
 

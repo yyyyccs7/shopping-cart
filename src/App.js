@@ -10,14 +10,11 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import clsx from 'clsx';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ShoppingCart from "./components/ShoppingCart"
-import Container from '@material-ui/core/Container';
-import { BottomNavigation } from '@material-ui/core';
 
 
 const App = () => {
@@ -26,6 +23,7 @@ const App = () => {
   const [data, setData] = useState({});
   const products = Object.values(data);
   const productid = Object.keys(data);
+  const [remain, setRemain] = useState({});
   const[ShoppingcardList, setShoppingcardList] = useState([]);
 
   useEffect(() => {
@@ -35,6 +33,13 @@ const App = () => {
       setData(json);
     };
     fetchProducts();
+
+    const fetchList = async () => {
+      const response = await fetch('./data/inventory.json');
+      const json = await response.json();
+      setRemain(json);
+    };
+    fetchList();
   }, []);
 
   const useStyles = makeStyles(theme => ({
@@ -151,14 +156,14 @@ const App = () => {
         <Divider />
        
         
-        <ShoppingCart ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList}/>
+        <ShoppingCart remain = {remain} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList}/>
         <p className={classes.price}> The total price is: {totalprice}</p>
         
       </Drawer>
 
     </div>
 
-        <ProductList products={products} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList} />
+        <ProductList products={products} remain = {remain} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList} />
 
         
       </React.Fragment>

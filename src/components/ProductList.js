@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     },
   });
 
-  const ProductList = ({products, ShoppingcardList, setShoppingcardList}) => {
+  const ProductList = ({products, remain, ShoppingcardList, setShoppingcardList}) => {
     const [spacing, setSpacing] = React.useState(2);
     const classes = useStyles();
   
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
                 <Grid container spacing={2} direction="row">
                     {products.map(product => 
                      <Grid item xs={3}>
-                        <ProductCard product={product} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList}></ProductCard>
+                        <ProductCard product={product} remain = {remain} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList}></ProductCard>
                     </Grid>
                     )}
                 </Grid>

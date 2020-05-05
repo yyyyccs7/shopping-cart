@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect }from 'react';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from '@material-ui/core/Typography';
@@ -28,7 +28,8 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const ShoppingCart = ({ShoppingcardList, setShoppingcardList}) => {
+const ShoppingCart = ({remain, ShoppingcardList, setShoppingcardList}) => {
+
     const classes = useStyles();
     const theme = useTheme();
 
@@ -37,7 +38,13 @@ const ShoppingCart = ({ShoppingcardList, setShoppingcardList}) => {
       let i;
       for(i = 0; i < tempCart.length; i++){
         if(size === tempCart[i].size && title === tempCart[i].title){
+          let sku = tempCart[i].sku;
+          if(remain[sku][size] <= 0){
+            alert("out of stock");
+            break;
+          }
           tempCart[i].quantity += 1;
+          remain[sku][size] -= 1;
           break;
         }
       }
@@ -49,10 +56,12 @@ const ShoppingCart = ({ShoppingcardList, setShoppingcardList}) => {
       let i;
       for(i = 0; i < tempCart.length; i++){
         if(size === tempCart[i].size && title === tempCart[i].title){
+          let sku = tempCart[i].sku;
           if(tempCart[i].quantity == 1){
             return;
           }
           tempCart[i].quantity -= 1;
+          remain[sku][size] += 1;
           break;
         }
       }
@@ -64,10 +73,11 @@ const ShoppingCart = ({ShoppingcardList, setShoppingcardList}) => {
       let i;
       for(i = 0; i < tempCart.length; i++){
         if(size === tempCart[i].size && title === tempCart[i].title){
+          let sku = tempCart[i].sku;
+          remain[sku][size] += tempCart[i].quantity;
           tempCart.splice(i, 1);
           setShoppingcardList(tempCart);
-          break;
-          
+          break;   
         }
       }
       
