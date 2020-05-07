@@ -47,6 +47,19 @@ const ProductCard = ({product, remain, ShoppingcardList, setShoppingcardList}) =
     const theme = useTheme();
 
     const [size, setSize] = useState('')
+    console.log(remain)
+    
+    const avaliable = (sku, size) =>{
+      if(remain[sku] === undefined){
+        return;
+      }
+      else if(remain[sku][size] <= 0){
+        return true;
+      }
+      else if(remain[sku][size] > 0){
+       return false;
+      }
+    }
 
 
     const handleShoppingCart = (x, title, price, sku) => {
@@ -119,16 +132,16 @@ const ProductCard = ({product, remain, ShoppingcardList, setShoppingcardList}) =
 
       <div>
         <CardActions>
-              <Button className={classes.button} onClick={() => handleShoppingCart('S', product.title, product.price, product.sku)} >
+              <Button disabled={avaliable(product.sku, "S")} className={classes.button} onClick={() => handleShoppingCart('S', product.title, product.price, product.sku)} >
                 S
               </Button>
-              <Button className={classes.button} onClick={() => handleShoppingCart('M', product.title, product.price, product.sku)}>
+              <Button disabled={avaliable(product.sku, "M")} className={classes.button} onClick={() => handleShoppingCart('M', product.title, product.price, product.sku)}>
                 M
               </Button>
-              <Button className={classes.button} onClick={() => handleShoppingCart('L', product.title, product.price, product.sku)}>
+              <Button disabled={avaliable(product.sku, "L")} className={classes.button} onClick={() => handleShoppingCart('L', product.title, product.price, product.sku)}>
                 L
               </Button>
-              <Button className={classes.button} onClick={() => handleShoppingCart('XL', product.title, product.price, product.sku)}>
+              <Button disabled={avaliable(product.sku, "XL")} className={classes.button} onClick={() => handleShoppingCart('XL', product.title, product.price, product.sku)}>
                 XL
               </Button>
 

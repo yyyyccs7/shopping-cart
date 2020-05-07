@@ -1,6 +1,6 @@
 import React, { useState, useEffect }from 'react';
 import './App.css';
-import firebase from './firebase.js'
+import firebase from './firebase.js';
 import ProductList from './components/ProductList.js'
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -26,6 +26,9 @@ const App = () => {
   const [remain, setRemain] = useState({});
   const[ShoppingcardList, setShoppingcardList] = useState([]);
 
+  //initialize firebase here
+  const db = firebase.database().ref();
+
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await fetch('./data/products.json');
@@ -34,12 +37,22 @@ const App = () => {
     };
     fetchProducts();
 
-    const fetchList = async () => {
-      const response = await fetch('./data/inventory.json');
-      const json = await response.json();
-      setRemain(json);
-    };
-    fetchList();
+    // fetch data using local json file
+    // const fetchList = async () => {
+    //   const response = await fetch('./data/inventory.json');
+    //   const json = await response.json();
+    //   setRemain(json);
+    // };
+    // fetchList();
+
+    const handleData = snap => {
+      if (snap.val()) {
+        console.log(snap.val())
+        setRemain(snap.val())
+      }
+    }
+    db.on('value', handleData, error => alert(error));
+    return () => { db.off('value', handleData); };
   }, []);
 
   const useStyles = makeStyles(theme => ({
