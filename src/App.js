@@ -15,6 +15,9 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import clsx from 'clsx';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ShoppingCart from "./components/ShoppingCart"
+import 'firebase/auth';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { Button, Container, Message, Title } from "rbx";
 
 
 const App = () => {
@@ -29,6 +32,41 @@ const App = () => {
   //initialize firebase here
   const db = firebase.database().ref();
 
+  //=================user authentication==================
+  const uiConfig = {
+    signInFlow: 'popup',
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      signInSuccessWithAuthResult: () => false
+    }
+  };
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged(setUser);
+  }, []);
+
+  const Welcome = ({ user }) => (
+    <Message color="info">
+      <Message.Header>
+        Welcome, {user.displayName}
+        <Button primary onClick={() => firebase.auth().signOut()}>
+          Log out
+        </Button>
+      </Message.Header>
+    </Message>
+  );
+
+  const SignIn = () => (
+    <StyledFirebaseAuth
+      uiConfig={uiConfig}
+      firebaseAuth={firebase.auth()}
+    />
+  );
+
+  //====================fetch data part=====================
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await fetch('./data/products.json');
@@ -128,6 +166,7 @@ const App = () => {
           <Typography variant="h6" noWrap className={classes.title}>
             Shopping Cart
           </Typography>
+          { user ? <Welcome user={ user } /> : <SignIn /> }
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -139,6 +178,7 @@ const App = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
+
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,

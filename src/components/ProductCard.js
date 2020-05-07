@@ -47,7 +47,6 @@ const ProductCard = ({product, remain, ShoppingcardList, setShoppingcardList}) =
     const theme = useTheme();
 
     const [size, setSize] = useState('')
-    console.log(remain)
     
     const avaliable = (sku, size) =>{
       if(remain[sku] === undefined){
