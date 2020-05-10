@@ -9,6 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ShoppingCart from "./ShoppingCart"
+import firebase from '../firebase.js';
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ProductCard = ({product, remain, ShoppingcardList, setShoppingcardList}) => {
+const ProductCard = ({user, product, remain, ShoppingcardList, setShoppingcardList}) => {    
     const [spacing, setSpacing] = React.useState(2);
     const classes = useStyles();
     const theme = useTheme();
@@ -60,8 +61,16 @@ const ProductCard = ({product, remain, ShoppingcardList, setShoppingcardList}) =
       }
     }
 
-
     const handleShoppingCart = (x, title, price, sku) => {
+
+      //=================create user informatio===================
+      console.log(user);
+      const db = firebase.database().ref()
+      // db.child('carts/' + user.uid).set({
+      //   name: user.displayName,
+      //   email: user.email
+      // })
+
       setSize(x);
       var tempCart = ShoppingcardList.slice(0);
 
@@ -82,6 +91,11 @@ const ProductCard = ({product, remain, ShoppingcardList, setShoppingcardList}) =
              break;
            }
            tempCart[i].quantity += 1;
+           //set the user's personal shopping cart
+           
+           db.child('carts/' + user.uid).push({
+            [sku]: {[x]: tempCart[i].quantity}
+          })
            remain[sku][x] -= 1;
            break;
          }
@@ -99,6 +113,10 @@ const ProductCard = ({product, remain, ShoppingcardList, setShoppingcardList}) =
             carditem.sku = sku;
             remain[sku][x] -= 1;
             tempCart.push(carditem);
+
+            db.child('carts/' + user.uid).push({
+              [sku]: {[x]: carditem.quantity}
+            })
           } 
        }
       setShoppingcardList(tempCart);

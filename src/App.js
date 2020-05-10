@@ -85,7 +85,6 @@ const App = () => {
 
     const handleData = snap => {
       if (snap.val()) {
-        console.log(snap.val())
         setRemain(snap.val())
       }
     }
@@ -209,15 +208,14 @@ const App = () => {
         <Divider />
        
         
-        <ShoppingCart remain = {remain} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList}/>
+        <ShoppingCart user={user} remain = {remain} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList}/>
         <p className={classes.price}> The total price is: {totalprice}</p>
         
       </Drawer>
 
     </div>
 
-        <ProductList products={products} remain = {remain} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList} />
-
+        <ProductList user={user} products={products} remain = {remain} ShoppingcardList={ShoppingcardList} setShoppingcardList={setShoppingcardList} />
         
       </React.Fragment>
     

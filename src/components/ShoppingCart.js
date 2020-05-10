@@ -8,6 +8,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import firebase from '../firebase.js';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
 
-const ShoppingCart = ({remain, ShoppingcardList, setShoppingcardList}) => {
+const ShoppingCart = ({user, remain, ShoppingcardList, setShoppingcardList}) => {
 
     const classes = useStyles();
     const theme = useTheme();
